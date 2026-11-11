@@ -1,0 +1,68 @@
+# mower-chassis
+
+割草机下位机：STM32F407VE + FreeRTOS。
+
+与 [mower-host](../mower-host) 配套：上位机（树莓派）负责界面、建图、导航；
+下位机负责电机闭环、安全检查、刀片、传感器采集，以及和上位机之间的串口协议。
+
+两轮差速，轮距 435 mm，胎径 180 mm，减速比 27。
+
+---
+
+## 目录
+
+```
+app/        应用层：主入口、中断入口、协议、状态机、运动学、PI、安全、界面
+bsp/        驱动：电机、编码器、串口、CAN、I2C、OLED、Flash、按键、蜂鸣器、LED
+cfg/        两个配置文件：FreeRTOSConfig.h、stm32f4xx_conf.h
+cmsis/      ARM CMSIS + ST 设备头 + 启动文件 + system_stm32f4xx
+spl/        ST 标准外设库（只留用到的外设）
+rtos/       FreeRTOS 内核 + CM4F 端口 + heap_4
+project/    Keil 工程 mower.uvprojx，编译产物输出到 ../OBJ/
+docs/       架构、协议、规格、硬件参数、上机清单
+```
+
+## 编译
+
+Keil MDK 5.24 + ARMCC 5.06u7，设备选 STM32F407VETx，需要 Keil.STM32F4xx_DFP 2.9.0。
+
+IDE：打开 `project/mower.uvprojx`，Rebuild。
+
+命令行：
+
+```
+UV4.exe -b project\mower.uvprojx -j0 -o project\build.log
+```
+
+产物在 `OBJ/`：`mower.axf`、`mower.hex`，以及后处理生成的 `mower.bin`。
+
+## 现状
+
+编译通过：`Code=26840 / ZI=29460`，0 error 0 warning。
+
+已实现：电机双闭环、六状态机与开机自检、刀片、舵机、IMU 姿态、OLED 三页诊断、
+超声波避障（CAN）、参数掉电保存、急停锁存、指令丢失保护。
+
+还没做或者关闭：
+
+- IWDG 默认关闭（`USE_IWDG 0`）
+- 蓝牙 APP 的自动回充键（收到丢掉）
+
+首次上机按 [docs/上机清单.md](docs/上机清单.md) 逐条过；硬件参数和极性见 [docs/硬件核对.md](docs/硬件核对.md)。
+
+## 约定
+
+- `.c` / `.h` 用 **GBK**（Keil 默认编码下中文注释才不乱码）
+- `.md` / `.gitignore` / `.ps1` 用 **UTF-8**（GitHub、PowerShell 需要）
+
+## 许可与来源
+
+MIT，见 [LICENSE](LICENSE)。
+
+`cmsis/`、`spl/`、`rtos/` 三部分是第三方代码，各自保留原版权头：CMSIS/SPL 属 ST（BSD），
+FreeRTOS 属 Real Time Engineers Ltd.（MIT）。这三部分**不是**本工程的版权范围，
+也不应被替换成别的许可。
+
+应用层（`app/`、`bsp/`、`cfg/`）是本工程写的部分。
+
+安全须知见 [DISCLAIMER.md](DISCLAIMER.md)。

@@ -1,0 +1,36 @@
+# 编译产物
+OBJ/
+tests/build/
+project/build.log
+*.axf
+*.hex
+*.bin
+*.map
+*.lst
+*.crf
+*.dep
+*.o
+*.d
+*.lnp
+*.htm
+*.sct
+*.iex
+*.tra
+
+# Keil 用户态文件（含窗口布局、断点，因人而异，不入库）
+*.uvguix.*
+*.uvoptx
+*.bak
+*.orig
+JLinkLog.txt
+RTE/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*~
+
+# 系统
+Thumbs.db
+desktop.ini
