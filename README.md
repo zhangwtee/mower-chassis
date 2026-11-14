@@ -17,6 +17,7 @@ cmsis/      ARM CMSIS + ST 设备头 + 启动文件 + system_stm32f4xx
 spl/        ST 标准外设库（只留了用到的外设）
 rtos/       FreeRTOS 内核 + CM4F 端口 + heap_4
 project/    Keil 工程 mower.uvprojx，编译产物输出到 ../OBJ/
+tests/      PC 单元测试，不参与固件编译
 docs/       架构、协议、规格、硬件参数、上机清单
 ```
 
@@ -27,6 +28,20 @@ Keil MDK 5.24 + ARMCC 5.06u7，设备选 STM32F407VETx，需要 Keil.STM32F4xx_D
 IDE：打开 `project/mower.uvprojx`，Rebuild。
 
 产物在 `OBJ/`：`mower.axf`、`mower.hex`，以及后处理生成的 `mower.bin`。
+
+## 测试
+
+纯逻辑模块（协议、遥测、运动学、PI、状态机、环缓、限幅、避障、驻车）不依赖任何 STM32 头，
+可以直接在 PC 上编：
+
+```
+powershell -ExecutionPolicy Bypass -File tests\run_tests.ps1
+```
+
+需要 gcc（脚本会先找 PATH，再试几个常见位置）。当前 **1122 条断言**，只跑逻辑，不碰硬件。
+
+`tests/vectors.h` 里是期望字节，由 `tests/gen_vectors.py` 按上位机的组帧逻辑生成；
+改了协议就 `python tests/gen_vectors.py` 重新生成一次。
 
 ## 现状
 
