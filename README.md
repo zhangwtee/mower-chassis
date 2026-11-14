@@ -5,8 +5,6 @@
 与 [mower-host](../mower-host) 配套：上位机（树莓派）负责界面、建图、导航；
 下位机负责电机闭环、安全检查、刀片、传感器采集，以及和上位机之间的串口协议。
 
-两轮差速，轮距 435 mm，胎径 180 mm，减速比 27。
-
 ---
 
 ## 目录
@@ -16,7 +14,7 @@ app/        应用层：主入口、中断入口、协议、状态机、运动�
 bsp/        驱动：电机、编码器、串口、CAN、I2C、OLED、Flash、按键、蜂鸣器、LED
 cfg/        两个配置文件：FreeRTOSConfig.h、stm32f4xx_conf.h
 cmsis/      ARM CMSIS + ST 设备头 + 启动文件 + system_stm32f4xx
-spl/        ST 标准外设库（只留用到的外设）
+spl/        ST 标准外设库（只留了用到的外设）
 rtos/       FreeRTOS 内核 + CM4F 端口 + heap_4
 project/    Keil 工程 mower.uvprojx，编译产物输出到 ../OBJ/
 docs/       架构、协议、规格、硬件参数、上机清单
@@ -27,12 +25,6 @@ docs/       架构、协议、规格、硬件参数、上机清单
 Keil MDK 5.24 + ARMCC 5.06u7，设备选 STM32F407VETx，需要 Keil.STM32F4xx_DFP 2.9.0。
 
 IDE：打开 `project/mower.uvprojx`，Rebuild。
-
-命令行：
-
-```
-UV4.exe -b project\mower.uvprojx -j0 -o project\build.log
-```
 
 产物在 `OBJ/`：`mower.axf`、`mower.hex`，以及后处理生成的 `mower.bin`。
 
