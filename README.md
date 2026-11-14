@@ -38,14 +38,14 @@ IDE：打开 `project/mower.uvprojx`，Rebuild。
 powershell -ExecutionPolicy Bypass -File tests\run_tests.ps1
 ```
 
-需要 gcc（脚本会先找 PATH，再试几个常见位置）。当前 **1122 条断言**，只跑逻辑，不碰硬件。
+需要 gcc（脚本会先找 PATH，再试几个常见位置）。跑完会打印通过数，只测逻辑，不碰硬件。
 
 `tests/vectors.h` 里是期望字节，由 `tests/gen_vectors.py` 按上位机的组帧逻辑生成；
 改了协议就 `python tests/gen_vectors.py` 重新生成一次。
 
 ## 现状
 
-编译通过：`Code=26840 / ZI=29460`，0 error 0 warning。
+编译通过：0 error 0 warning。尺寸看编译输出，不在这里写死。
 
 已实现：电机双闭环、六状态机与开机自检、刀片、舵机、IMU 姿态、OLED 三页诊断、
 超声波避障（CAN）、参数掉电保存、急停锁存、指令丢失保护。
